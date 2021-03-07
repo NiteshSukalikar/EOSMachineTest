@@ -4,8 +4,6 @@ import { AuthService } from "./auth.service";
 import * as moment from "moment";
 import { EventData } from "ngx-event-calendar/lib/interface/event-data";
 
-export const testData: EventData[] = [];
-
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
@@ -37,7 +35,7 @@ export class AppComponent {
 
   constructor(private authService: AuthService) {}
 
-  dataArray: EventData[] = testData;
+  dataArray: EventData[] = [];
 
   selectDay(date) {
     this.selectedDate = date;
@@ -57,21 +55,37 @@ export class AppComponent {
     this.initForm();
     this.approvalInitForm();
     this.getApproval();
-    this.isLogin = true;
-    this.isAdmin = false;
+    if (localStorage.getItem("user")) {
+      var user: any = JSON.parse(localStorage.getItem("user"));
+      if (user.data.roleId === 1) {
+        this.isAdmin = true;
+      } else {
+        this.isAdmin = false;
+      }
+      this.isLogin = false;
+    } else {
+      this.isLogin = true;
+    }
     this.isError = false;
   }
 
+  logout() {
+    this.isLogin = true;
+  }
+
   getApproval() {
-    this.authService.getApproval().subscribe((res) => {
+    this.authService.getApproval().subscribe((res: any) => {
       if (res) {
+        this.dataArray = res.map((c: any) => {
+          (c.startDate = moment(c.startDate)), (c.endDate = moment(c.endDate));
+          return c;
+        });
         this.list = res;
         this.isComment = true;
       }
     });
   }
   openModal(item?) {
-    debugger;
     this.display = "block";
     this.backdrop = true;
     if (item) {
@@ -88,7 +102,7 @@ export class AppComponent {
     var currentDate =
       this.selectedDate.year +
       "-" +
-      this.selectedDate.month +
+      (this.selectedDate.month + 1) +
       "-" +
       this.selectedDate.day;
 
@@ -156,11 +170,12 @@ export class AppComponent {
     );
   }
 
-  onApprovalSubmit(data, item?) {
-    debugger;
+  onApprovalSubmit(data: any, item?: any) {
     if (data === "Approved") {
+      var id = item.id;
       var Status = 2;
     } else {
+      var id = this.rejectedData.id
       var Status = 3;
     }
 
@@ -179,19 +194,13 @@ export class AppComponent {
         status: Status,
       };
     }
-
-    if (data === "Approved") {
-     this.delete(item.id);
-    } else {
-      this.authService.EditApproval(this.rejectedData.id, model).subscribe((res) => {
-        alert("Leave Rejected");
-        this.delete(this.rejectedData.id);
-      });
-    }
+    this.authService.EditApproval(id, model).subscribe((res) => {
+      this.getApproval();
+    });
     this.onCloseHandled();
   }
 
-  delete(id){
+  delete(id: any) {
     this.authService.DeleteApproval(id).subscribe((res) => {
       this.getApproval();
     });

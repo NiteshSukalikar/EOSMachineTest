@@ -1,16 +1,5 @@
-<app-header></app-header>
-
-
-
-<div *ngIf="!isAdmin && !isLogin" class="container">
-  <div>
-    <div class="form-group">
-      <label class="form-control" for="Role">Name : {{Name}}</label>
-    </div>
-    <div class="form-group">
-      <label class="form-control" for="Role">Role : {{Role}}</label>
-    </div>
-  </div>
+<app-header (logout)=logout();></app-header>
+<div *ngIf="!isAdmin && !isLogin" style="height: 100vh;">
   <ngx-event-calendar [dataSource]="dataArray" [showAddButton]="true" [language]="'en'" (dayEvents)="selectDay($event)">
   </ngx-event-calendar>
 </div>
@@ -21,15 +10,19 @@
     <div class="card mb-5" *ngFor="let item of list">
       <div class="row mt-2">
         <div class="col-lg-6">
-          <ol>
-            <li class="alert alert-primary" role="alert">Name: {{item.userId}}</li>
-            <li class="alert alert-primary">Leave Requested Date : {{item.leaveDate | date}}</li>
-          </ol>
+          <div class="col-md-8"></div>
+          <div class="col-md-4"></div>
+          <ul>
+            <li class="alert alert-primary">Name: {{item.createdBy}} Leave Requested Date : {{item.leaveDate | date}} </li>
+          </ul>
         </div>
-        <div class="col-lg-6">
+        <div *ngIf="item.status === 1" class="col-lg-6">
           <button type="button" class="btn btn-primary btn-lg m-2"
             (click)="onApprovalSubmit('Approved' ,item)">Approved</button>
           <button type="button" class="btn btn-danger btn-lg" (click)="openModal(item)">Rejected</button>
+        </div>
+        <div *ngIf="item.status !==1" class="col-lg-6">
+          <button type="button" class="btn btn-success btn-lg">{{item.status === 2 ? 'Leave Approved' : 'Leave Rejected'}}</button>
         </div>
       </div>
     </div>
@@ -39,7 +32,6 @@
 
 <div class="container mt-5" *ngIf="isLogin">
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-
     <div class="row">
       <div class="col-lg-12">
         <div class="form-group">
@@ -103,8 +95,7 @@
           </div>
           <div class="row mb-2">
             <div class="col-lg-12">
-              <button type="submit" [disabled]="!ApprovalForm.valid" class="btn btn-success  btn-lg mr-1"
-               >Rejct</button>
+              <button type="submit" [disabled]="!ApprovalForm.valid" class="btn btn-success  btn-lg mr-1">Rejct</button>
             </div>
           </div>
         </form>

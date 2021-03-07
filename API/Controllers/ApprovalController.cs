@@ -1,13 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Porabay.Models;
 using PorabayData.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Porabay.Controllers
 {
@@ -28,10 +23,7 @@ namespace Porabay.Controllers
         [EnableCors("Policy1")]
         [HttpGet]
         public IActionResult Get()
-        {
-            //var user = mapper.Map<List<Domain>>(dbContext.tblDomainData.ToList());
-            // var user = dbContext.tblLogin.ToList();
-            //List<DomainVM> domainDeatils = mapper.Map<List<DomainVM>>(domainData); working solution 
+        {   
             var approvalData = this.approvalRepository.GetApprovals();
             return Ok(approvalData);
         }
@@ -48,12 +40,12 @@ namespace Porabay.Controllers
        
         [EnableCors("Policy1")]
         [HttpPost]
+        // Need to check this api why getting 204
         public IActionResult Create([FromBody] ApprovalVM model)
         {
             var approvalData = this.approvalRepository.addApprovalDetails(model);
             return Ok(approvalData);
         }
-
        
         [EnableCors("Policy1")]
         [Route("{Id}")]

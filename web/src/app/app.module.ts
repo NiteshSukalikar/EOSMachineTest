@@ -3,13 +3,12 @@ import { BrowserModule } from "@angular/platform-browser";
 import { AppComponent } from "./app.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgxCalendarModule } from "ss-ngx-calendar";
-import { HeaderComponent } from "./header/header.component";
+import { HeaderComponent } from "./components/header/header.component";
 
 import { HttpClientModule } from "@angular/common/http";
 import { CommonModule } from "@angular/common";
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {NgxEventCalendarModule} from 'ngx-event-calendar';
-import { AppRoutingModule } from "./app-routing.module";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { NgxEventCalendarModule } from "ngx-event-calendar";
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent],
@@ -23,10 +22,9 @@ import { AppRoutingModule } from "./app-routing.module";
     NgbModule,
     NgxEventCalendarModule,
     //AppRoutingModule
-
   ],
   providers: [],
   bootstrap: [AppComponent],
-  exports: [ReactiveFormsModule]
+  exports: [ReactiveFormsModule],
 })
 export class AppModule {}

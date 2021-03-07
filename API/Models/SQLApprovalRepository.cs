@@ -64,7 +64,23 @@ namespace Porabay.Models
 
         public IEnumerable<ApprovalVM> GetApprovals()
         {
-            return mapper.Map<List<ApprovalVM>>(dbContext.tblApproval);
+         return (from a in this.dbContext.tblApproval
+                    join u in this.dbContext.tblLogin
+                    on a.UserId equals u.LoginID
+                    select new ApprovalVM {
+                        Id = a.Id,
+                        CreatedBy = u.Username,
+                        Desc = "Applied",
+                        EndDate = a.LeaveDate,
+                        LeaveDate = a.LeaveDate,
+                        StartDate = a.LeaveDate,
+                        Status = a.Status,
+                        Title = "Leave",
+                        UserId = a.UserId,
+                        Comment = a.Comment,
+                        // Type = 2,
+                        Color = "red"
+                    }).ToList();
         }
     }
 }
