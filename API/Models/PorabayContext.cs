@@ -11,12 +11,7 @@ namespace Porabay.Models
         }
 
         public DbSet<Login> tblLogin { get; set; }
-        public DbSet<Registration> tblRegistration { get; set; }
-        public DbSet<Domain> tblDomainData { get; set; }
-        public DbSet<User> tblUser { get; set; }
         public DbSet<Approval> tblApproval { get; set; }
-        //public DbSet<User> tblRole { get; set; }
-        //public DbSet<User> tblStatus { get; set; }
 
     }
 }

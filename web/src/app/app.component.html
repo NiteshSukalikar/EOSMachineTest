@@ -1,6 +1,6 @@
 <app-header (logout)=logout();></app-header>
 <div *ngIf="!isAdmin && !isLogin" style="height: 100vh;">
-  <ngx-event-calendar [dataSource]="dataArray" [showAddButton]="true" [language]="'en'" (dayEvents)="selectDay($event)">
+  <ngx-event-calendar [dataSource]="dataArray" [showAddButton]="false" [language]="'en'" (dayEvents)="selectDay($event)">
   </ngx-event-calendar>
 </div>
 

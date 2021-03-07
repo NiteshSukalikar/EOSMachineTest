@@ -44,9 +44,21 @@ export class AppComponent {
       moment(this.selectedDate).isAfter(currentdate) ||
       moment(this.selectedDate).isSame(moment(), "day")
     ) {
-      this.openModal();
+      let isAny = this.dataArray.find((c: any) => {
+        if (
+          moment(c.leaveDate).format("YYYY-MM-DD") ===
+          moment(date).format("YYYY-MM-DD")
+        ) {
+          return c;
+        }
+      });
+      if (isAny) {
+        alert("You have already applied for a leave");
+      } else {
+        this.openModal();
+      }
     } else {
-      alert("You cannot apply for leave");
+      alert("You cannot apply for past date leave");
     }
   }
 
@@ -77,7 +89,18 @@ export class AppComponent {
     this.authService.getApproval().subscribe((res: any) => {
       if (res) {
         this.dataArray = res.map((c: any) => {
-          (c.startDate = moment(c.startDate)), (c.endDate = moment(c.endDate));
+          if (c.status === 1) {
+            c.desc = "Pending";
+            c.color = "orange";
+          } else if (c.status === 2) {
+            c.desc = "Approved";
+            c.color = "green";
+          } else {
+            c.desc = "Rejected";
+            c.color = "red";
+          }
+          (c.startDate = moment(c.startDate).add(2, "hours")),
+            (c.endDate = moment(c.endDate).add(2, "hours"));
           return c;
         });
         this.list = res;
@@ -98,7 +121,6 @@ export class AppComponent {
   }
 
   applyLeave() {
-    debugger;
     var currentDate =
       this.selectedDate.year +
       "-" +
@@ -175,7 +197,7 @@ export class AppComponent {
       var id = item.id;
       var Status = 2;
     } else {
-      var id = this.rejectedData.id
+      var id = this.rejectedData.id;
       var Status = 3;
     }
 

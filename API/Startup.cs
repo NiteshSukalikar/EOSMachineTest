@@ -43,8 +43,6 @@ namespace Porabay
 
             services.AddDbContext<PorabayContext>(options => options.UseSqlServer(ConnectionString));
 
-            services.AddScoped<IDomainRepository, SQLDomainRepository>();
-            services.AddScoped<IUserRepository, SQLUserRepository>();
             services.AddScoped<IApprovalRepository, SQLApprovalRepository>();
 
             var key = "this is test key";
